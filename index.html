@@ -211,13 +211,13 @@
 </head>
 <body x-data="appData()" x-init="init()" @mousemove="handleCursor($event)">
 
-    <!-- BRAND INTRO OVERLAY -->
+    <!-- BRAND INTRO OVERLAY (WHITE LEGAL DOCUMENT THEME) -->
     <div id="brand-intro" 
          x-show="introActive"
          x-transition:leave="transition-opacity duration-700 ease-in-out"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
-         class="fixed inset-0 z-[99999] bg-brand-black flex flex-col items-center justify-center overflow-hidden">
+         class="fixed inset-0 z-[99999] bg-brand-light flex flex-col items-center justify-center overflow-hidden border-b border-brand-black/10">
         
         <div class="relative flex flex-col items-center text-center px-6 max-w-xl">
             
@@ -226,20 +226,20 @@
                 <img 
                     src="https://cdn.phototourl.com/member/2026-09-27-f998a1a6-e9c4-46c3-8a87-d45dd4ae1925.png" 
                     alt="PT. DZAKIY MAJU BERSAMA Logo" 
-                    class="w-full h-full object-contain filter drop-shadow-[0_4px_24px_rgba(215,25,32,0.6)]"
+                    class="w-full h-full object-contain filter drop-shadow-[0_4px_24px_rgba(215,25,32,0.3)]"
                 />
             </div>
 
             <!-- Company Title with Serif Logo Font -->
             <div id="intro-name" class="opacity-0 translate-y-3 transition-all duration-500 ease-out mb-2">
-                <h2 class="font-serif font-bold text-lg sm:text-xl md:text-2xl tracking-[0.18em] uppercase text-brand-light whitespace-nowrap">
+                <h2 class="font-serif font-bold text-lg sm:text-xl md:text-2xl tracking-[0.18em] uppercase text-brand-black whitespace-nowrap">
                     PT. <span class="text-brand-red">DZAKIY</span> MAJU BERSAMA
                 </h2>
             </div>
 
             <!-- Corporate Tagline -->
             <div id="intro-tagline" class="opacity-0 translate-y-2 transition-all duration-500 ease-out mb-5">
-                <p class="text-[10px] sm:text-xs font-mono tracking-[0.25em] uppercase text-brand-muted whitespace-nowrap" x-text="t('introTagline')"></p>
+                <p class="text-[10px] sm:text-xs font-mono tracking-[0.25em] uppercase text-brand-black/60 whitespace-nowrap" x-text="t('introTagline')"></p>
             </div>
 
             <!-- Thin Red Connection Line -->
