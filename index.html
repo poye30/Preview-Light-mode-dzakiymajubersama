@@ -1,100 +1,1241 @@
 ```html
 <!DOCTYPE html>
-<html lang="id" class="dark scroll-smooth">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PT. DZAKIY MAJU BERSAMA — Strategic Business Partner</title>
+    <title>PT. DZAKIY MAJU BERSAMA — Strategic Business & Transaction Partner</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans, Oswald & Cinzel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Oswald:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
                         brand: {
                             black: '#080808',
-                            dark: '#121212',
-                            surface: '#1A1A1A',
-                            border: '#2A2A2A',
-                            text: '#FAFAFA',
-                            muted: '#9E9D97',
+                            dark: '#161616',
+                            grey: '#222222',
+                            light: '#F2F2F0',
                             red: '#D71920',
-                            redHover: '#B51318'
+                            redHover: '#B51218',
+                            muted: '#8E8E93'
                         }
                     },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        display: ['Syne', 'sans-serif']
+                        serif: ['Cinzel', 'Georgia', 'serif'],
+                        condensed: ['Oswald', 'sans-serif']
                     }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+    <!-- Alpine.js Plugins & Core -->
+    <script defer src="https://unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        html, body {
+            background-color: #080808;
+            color: #F2F2F0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            width: 100%;
+            letter-spacing: 0.01em;
+        }
+
+        .font-condensed {
+            font-family: 'Oswald', sans-serif;
+        }
+
+        /* Grid pattern background */
+        .bg-grid-pattern {
+            background-size: 60px 60px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #080808;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #222222;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D71920;
+        }
+
+        /* Custom Desktop Cursor */
+        @media (min-width: 1024px) {
+            #custom-cursor {
+                pointer-events: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 10px;
+                height: 10px;
+                background-color: #D71920;
+                border-radius: 50%;
+                z-index: 9999;
+                transform: translate3d(-50%, -50%, 0);
+                transition: transform 0.15s ease-out, opacity 0.2s ease, background-color 0.2s ease;
+            }
+            #custom-cursor-ring {
+                pointer-events: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 38px;
+                height: 38px;
+                border: 1px solid rgba(215, 25, 32, 0.6);
+                border-radius: 50%;
+                z-index: 9998;
+                transform: translate3d(-50%, -50%, 0);
+                transition: transform 0.25s ease-out, border-color 0.2s ease, width 0.2s ease, height 0.2s ease;
+            }
+            body.hovering-cta #custom-cursor {
+                transform: translate3d(-50%, -50%, 0) scale(2.2);
+                background-color: #ffffff;
+            }
+            body.hovering-cta #custom-cursor-ring {
+                width: 54px;
+                height: 54px;
+                border-color: #D71920;
+            }
+        }
+
+        /* Hero Background Zoom Effect */
+        .hero-bg-zoom {
+            transform: scale(1.05);
+            transition: transform 3.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hero-bg-zoom.loaded {
+            transform: scale(1.00);
+        }
+
+        /* SVG Line Drawing Utilities */
+        .svg-line-draw {
+            stroke-dasharray: 600;
+            stroke-dashoffset: 600;
+            transition: stroke-dashoffset 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .svg-line-draw.active {
+            stroke-dashoffset: 0;
+        }
+
+        /* Sequential Diagram Elements */
+        .diagram-step {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        @media (min-width: 1024px) {
+            .diagram-step.js-animate {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            .diagram-step.js-animate.active {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes dashTravel {
+            to {
+                stroke-dashoffset: -100;
+            }
+        }
+
+        .animate-dash-flow {
+            stroke-dasharray: 12 12;
+            animation: dashTravel 2s linear infinite;
+        }
+
+        /* General Scroll Reveal Utility */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-up.is-revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Capability Image Slide Animation */
+        .cap-img-slide {
+            transform: translateX(40px);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease-out;
+        }
+        .cap-row-active .cap-img-slide {
+            transform: translateX(0);
+            opacity: 1 !important;
+        }
+
+        /* Capability Arrow Slide */
+        .cap-arrow-move {
+            transition: transform 0.3s ease;
+        }
+        .cap-row-active .cap-arrow-move {
+            transform: translateX(8px);
+        }
+
+        /* Reduced Motion Fallback */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .reveal-up, .diagram-step, .cap-img-slide {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            .svg-line-draw {
+                stroke-dashoffset: 0 !important;
+            }
+        }
+    </style>
 </head>
-<body class="bg-brand-black text-brand-text font-sans antialiased selection:bg-brand-red selection:text-white">
-    <header class="sticky top-0 z-50 bg-brand-black/90 backdrop-blur-md border-b border-brand-border px-5 py-4 flex justify-between items-center">
-        <div class="flex items-center gap-3">
-            <div class="w-9 h-9 bg-brand-red flex items-center justify-center font-bold rounded text-white text-lg font-display">D</div>
-            <div class="flex flex-col">
-                <span class="font-bold text-xs tracking-wider font-display">PT. DZAKIY MAJU BERSAMA</span>
-                <span class="text-[9px] text-brand-muted tracking-widest uppercase">Strategic Partner</span>
+<body x-data="appData()" x-init="init()" @mousemove="handleCursor($event)">
+
+    <!-- BRAND INTRO OVERLAY -->
+    <div id="brand-intro" 
+         x-show="introActive"
+         x-transition:leave="transition-opacity duration-700 ease-in-out"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-[99999] bg-brand-black flex flex-col items-center justify-center overflow-hidden">
+        
+        <div class="relative flex flex-col items-center text-center px-6 max-w-xl">
+            <div id="intro-logo" class="w-32 h-32 md:w-40 md:h-40 mb-6 opacity-0 scale-90 transition-all duration-500 ease-out">
+                <img 
+                    src="https://cdn.phototourl.com/member/2026-09-27-f998a1a6-e9c4-46c3-8a87-d45dd4ae1925.png" 
+                    alt="PT. DZAKIY MAJU BERSAMA Logo" 
+                    class="w-full h-full object-contain filter drop-shadow-[0_4px_24px_rgba(215,25,32,0.6)]"
+                />
+            </div>
+
+            <div id="intro-name" class="opacity-0 translate-y-3 transition-all duration-500 ease-out mb-2">
+                <h2 class="font-serif font-bold text-lg sm:text-xl md:text-2xl tracking-[0.18em] uppercase text-white whitespace-nowrap">
+                    PT. <span class="text-brand-red">DZAKIY</span> MAJU BERSAMA
+                </h2>
+            </div>
+
+            <div id="intro-tagline" class="opacity-0 translate-y-2 transition-all duration-500 ease-out mb-5">
+                <p class="text-[10px] sm:text-xs font-mono tracking-[0.25em] uppercase text-brand-muted whitespace-nowrap" x-text="t('introTagline')"></p>
+            </div>
+
+            <div class="relative w-full h-[2px] flex justify-center items-center overflow-visible">
+                <div id="intro-red-line" class="h-[2px] bg-brand-red w-0 transition-all duration-500 ease-out shadow-[0_0_16px_#D71920]"></div>
             </div>
         </div>
-        <a href="#kontak" class="bg-brand-surface hover:bg-brand-border text-brand-text text-[11px] font-bold px-4 py-2 rounded-lg border border-brand-border transition-colors">KONTAK</a>
+    </div>
+
+    <!-- Custom Cursor Canvas -->
+    <div id="custom-cursor" class="hidden lg:block"></div>
+    <div id="custom-cursor-ring" class="hidden lg:block"></div>
+
+    <!-- STICKY HEADER -->
+    <header 
+        :class="isScrolled ? 'bg-brand-black/95 backdrop-blur-md border-b border-white/10 py-3.5' : 'bg-transparent py-5'" 
+        class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex items-center justify-between">
+            
+            <a href="#" class="flex items-center gap-2.5 sm:gap-3.5 group flex-shrink min-w-0 mr-2">
+                <div class="relative w-9 h-9 sm:w-11 sm:h-11 flex-shrink-0">
+                    <img 
+                        src="https://cdn.phototourl.com/member/2026-09-27-f998a1a6-e9c4-46c3-8a87-d45dd4ae1925.png" 
+                        alt="PT. DZAKIY MAJU BERSAMA Logo" 
+                        class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-[0_2px_8px_rgba(215,25,32,0.4)]"
+                    />
+                </div>
+                <div class="flex flex-col min-w-0">
+                    <span class="font-serif font-bold text-xs sm:text-base leading-snug tracking-wide text-white truncate">
+                        PT. <span class="text-brand-red">DZAKIY</span> MAJU BERSAMA
+                    </span>
+                    <span class="hidden sm:block text-[7.5px] sm:text-[8.5px] uppercase tracking-[0.2em] text-brand-muted font-mono whitespace-nowrap" x-text="t('subTagline')"></span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden xl:flex items-center gap-6 xl:gap-8">
+                <a href="#about" class="text-xs uppercase tracking-widest font-semibold text-brand-light/80 hover:text-brand-red transition-colors whitespace-nowrap" x-text="t('navWhoWeAre')"></a>
+                <a href="#how-we-connect" class="text-xs uppercase tracking-widest font-semibold text-brand-light/80 hover:text-brand-red transition-colors whitespace-nowrap" x-text="t('navConnectionLayer')"></a>
+                <a href="#capabilities" class="text-xs uppercase tracking-widest font-semibold text-brand-light/80 hover:text-brand-red transition-colors whitespace-nowrap" x-text="t('navCapabilities')"></a>
+                <a href="#ecosystem" class="text-xs uppercase tracking-widest font-semibold text-brand-light/80 hover:text-brand-red transition-colors whitespace-nowrap" x-text="t('navEcosystem')"></a>
+                <a href="#business-areas" class="text-xs uppercase tracking-widest font-semibold text-brand-light/80 hover:text-brand-red transition-colors whitespace-nowrap" x-text="t('navSectors')"></a>
+                <a href="#management" class="text-xs uppercase tracking-widest font-semibold text-brand-light/80 hover:text-brand-red transition-colors whitespace-nowrap" x-text="t('navManagement')"></a>
+            </nav>
+
+            <div class="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+                <!-- ID / EN Toggle Control -->
+                <div class="flex items-center bg-brand-dark/90 border border-white/20 p-1 text-[11px] sm:text-xs font-mono font-bold flex-shrink-0">
+                    <button 
+                        @click="lang = 'ID'" 
+                        :class="lang === 'ID' ? 'bg-brand-red text-white shadow-sm' : 'text-brand-muted hover:text-white'"
+                        class="px-2 py-0.5 sm:px-2.5 sm:py-1 transition-all duration-200 uppercase">
+                        ID
+                    </button>
+                    <span class="text-white/20 px-0.5">|</span>
+                    <button 
+                        @click="lang = 'EN'" 
+                        :class="lang === 'EN' ? 'bg-brand-red text-white shadow-sm' : 'text-brand-muted hover:text-white'"
+                        class="px-2 py-0.5 sm:px-2.5 sm:py-1 transition-all duration-200 uppercase">
+                        EN
+                    </button>
+                </div>
+
+                <!-- Desktop CTA Button -->
+                <div class="hidden lg:flex items-center">
+                    <button 
+                        @click="modalOpen = true"
+                        @mouseenter="hoverCta(true)"
+                        @mouseleave="hoverCta(false)"
+                        class="group relative inline-flex items-center justify-center px-5 py-2.5 sm:px-6 sm:py-3 text-xs uppercase tracking-wider font-bold text-white bg-brand-red hover:bg-brand-redHover transition-all duration-300 overflow-hidden whitespace-nowrap shadow-lg hover:shadow-brand-red/30">
+                        <span class="relative z-10 flex items-center gap-2">
+                            <span x-text="t('ctaDiscuss')"></span>
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"></i>
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Mobile Hamburger Toggle -->
+                <button 
+                    @click="mobileMenuOpen = !mobileMenuOpen" 
+                    class="lg:hidden text-white p-2 focus:outline-none flex-shrink-0">
+                    <i :data-lucide="mobileMenuOpen ? 'x' : 'menu'" class="w-6 h-6 text-brand-light"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Drawer -->
+        <div 
+            x-show="mobileMenuOpen" 
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 -translate-y-4"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 -translate-y-4"
+            class="lg:hidden bg-[#080808] border-b-2 border-brand-red px-6 py-8 absolute top-full left-0 right-0 z-50 flex flex-col gap-6 shadow-2xl"
+            style="display: none;">
+            <a @click="mobileMenuOpen = false" href="#about" class="text-sm uppercase tracking-widest font-semibold text-brand-light hover:text-brand-red" x-text="t('navWhoWeAre')"></a>
+            <a @click="mobileMenuOpen = false" href="#how-we-connect" class="text-sm uppercase tracking-widest font-semibold text-brand-light hover:text-brand-red" x-text="t('navConnectionLayer')"></a>
+            <a @click="mobileMenuOpen = false" href="#capabilities" class="text-sm uppercase tracking-widest font-semibold text-brand-light hover:text-brand-red" x-text="t('navCapabilities')"></a>
+            <a @click="mobileMenuOpen = false" href="#ecosystem" class="text-sm uppercase tracking-widest font-semibold text-brand-light hover:text-brand-red" x-text="t('navEcosystem')"></a>
+            <a @click="mobileMenuOpen = false" href="#business-areas" class="text-sm uppercase tracking-widest font-semibold text-brand-light hover:text-brand-red" x-text="t('navSectors')"></a>
+            <a @click="mobileMenuOpen = false" href="#management" class="text-sm uppercase tracking-widest font-semibold text-brand-light hover:text-brand-red" x-text="t('navManagement')"></a>
+            
+            <div class="pt-4 border-t border-white/10 flex items-center justify-between">
+                <span class="text-xs uppercase font-mono text-brand-muted">Bahasa / Language:</span>
+                <div class="flex items-center bg-brand-dark border border-white/20 p-1 text-xs font-mono font-bold">
+                    <button @click="lang = 'ID'" :class="lang === 'ID' ? 'bg-brand-red text-white' : 'text-brand-muted'" class="px-3 py-1">ID</button>
+                    <button @click="lang = 'EN'" :class="lang === 'EN' ? 'bg-brand-red text-white' : 'text-brand-muted'" class="px-3 py-1">EN</button>
+                </div>
+            </div>
+
+            <div>
+                <button 
+                    @click="mobileMenuOpen = false; modalOpen = true"
+                    class="w-full py-3 bg-brand-red text-white font-bold uppercase tracking-wider text-center text-sm flex items-center justify-center gap-2">
+                    <span x-text="t('ctaDiscuss')"></span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
     </header>
 
-    <main class="px-5 py-20 max-w-xl mx-auto text-center">
-        <span class="text-brand-red font-mono text-[10px] uppercase tracking-[0.25em] mb-4 block font-semibold">Strategic Business Partner</span>
-        <h1 class="text-3xl sm:text-5xl font-extrabold uppercase tracking-tight mb-6 leading-tight font-display">
-            MENGHUBUNGKAN MODAL.<br><span class="text-brand-red">MEMBUKA PELUANG.</span>
-        </h1>
-        <p class="text-brand-muted text-sm sm:text-base mb-10 leading-relaxed max-w-md mx-auto">
-            Menghubungkan proyek dan kebutuhan bisnis dengan penyedia modal, investor, dan mitra strategis global secara profesional.
-        </p>
-        <div class="flex flex-col sm:flex-row justify-center gap-3">
-            <a href="#kontak" class="bg-brand-red hover:bg-brand-redHover text-white px-7 py-3.5 rounded-lg font-bold text-xs uppercase tracking-wider shadow-lg transition-all">
-                Hubungi Kami
-            </a>
-            <a href="#tentang" class="bg-brand-surface hover:bg-brand-border text-brand-text px-7 py-3.5 rounded-lg font-bold text-xs uppercase tracking-wider border border-brand-border transition-all">
-                Pelajari Kami
-            </a>
+    <!-- HERO SECTION -->
+    <section class="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden bg-brand-black bg-grid-pattern">
+        <div 
+            :class="loaded ? 'opacity-0 pointer-events-none' : 'opacity-100'"
+            class="fixed inset-0 bg-brand-black z-50 transition-opacity duration-700">
         </div>
-    </main>
 
-    <section id="tentang" class="bg-brand-dark border-t border-brand-border py-16 px-5">
-        <div class="max-w-xl mx-auto">
-            <span class="text-brand-red font-mono text-[10px] uppercase tracking-widest block mb-2 font-semibold">01 // Siapa Kami</span>
-            <h2 class="text-2xl font-bold uppercase mb-4 font-display">Orchestrating Global Capital & Industrial Value Chains</h2>
-            <p class="text-brand-muted text-xs sm:text-sm mb-8 leading-relaxed">
-                PT. Dzakiy Maju Bersama berdiri sebagai katalisator transaksi bernilai tinggi, menyelaraskan kebutuhan korporasi dengan jaringan eksekusi lintas sektor yang terverifikasi dan terpercaya.
-            </p>
-            <div class="rounded-xl overflow-hidden border border-brand-border bg-brand-surface p-2 shadow-xl">
-                <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1000&q=80" alt="Industrial Asset" class="w-full h-56 object-cover rounded-lg opacity-80 hover:opacity-100 transition-opacity">
+        <div class="absolute inset-0 z-0 overflow-hidden">
+            <img 
+                src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?q=80&w=2000&auto=format&fit=crop" 
+                alt="Industrial Infrastructure and Port" 
+                :class="loaded ? 'loaded' : ''"
+                class="hero-bg-zoom w-full h-full object-cover object-center opacity-30 filter grayscale contrast-125"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/70 to-brand-black/40"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/80 to-transparent"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 w-full py-12">
+            <div class="w-full max-w-xs mb-8 overflow-hidden">
+                <div 
+                    class="h-[2px] bg-brand-red transition-all duration-1000 ease-out"
+                    :class="loaded ? 'w-28' : 'w-0'">
+                </div>
             </div>
-            <div class="mt-4 text-center">
-                <span class="inline-block bg-brand-black border border-brand-border px-4 py-2 rounded-full text-[10px] font-mono text-brand-muted uppercase tracking-wider">
-                    SUMBER DAYA & KOMODITAS — <span class="text-brand-text font-semibold">PASIR INDUSTRI & TAMBANG</span>
+
+            <div class="space-y-2 mb-8">
+                <div class="overflow-hidden">
+                    <h1 
+                        :class="loaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'"
+                        class="font-bold text-3xl sm:text-5xl md:text-6xl lg:text-7xl uppercase tracking-normal text-white leading-tight transition-all duration-700 ease-out delay-200"
+                        x-text="t('heroHeadline1')">
+                    </h1>
+                </div>
+
+                <div class="overflow-hidden">
+                    <h1 
+                        :class="loaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'"
+                        class="font-bold text-3xl sm:text-5xl md:text-6xl lg:text-7xl uppercase tracking-normal text-white leading-tight transition-all duration-700 ease-out delay-400">
+                        <span x-text="t('heroHeadline2')"></span><span class="text-brand-red">.</span>
+                    </h1>
+                </div>
+            </div>
+
+            <div 
+                :class="loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
+                class="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm font-mono tracking-widest uppercase text-brand-muted mb-12 transition-all duration-700 ease-out delay-600">
+                <span class="text-brand-light font-semibold" x-text="t('heroTag1')"></span>
+                <span class="text-brand-red">•</span>
+                <span class="text-brand-light font-semibold" x-text="t('heroTag2')"></span>
+                <span class="text-brand-red">•</span>
+                <span class="text-brand-light font-semibold" x-text="t('heroTag3')"></span>
+                <span class="text-brand-red">•</span>
+                <span class="text-brand-light font-semibold" x-text="t('heroTag4')"></span>
+            </div>
+
+            <div 
+                :class="loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
+                class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6 transition-all duration-700 ease-out delay-800">
+                
+                <a 
+                    href="#about"
+                    @mouseenter="hoverCta(true)"
+                    @mouseleave="hoverCta(false)"
+                    class="group px-8 py-4 bg-brand-red hover:bg-brand-redHover text-white font-bold uppercase tracking-wider text-xs sm:text-sm inline-flex items-center justify-center gap-3 transition-all duration-300 shadow-xl hover:shadow-brand-red/40">
+                    <span x-text="t('heroExploreBtn')"></span>
+                    <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"></i>
+                </a>
+
+                <button 
+                    @click="modalOpen = true"
+                    @mouseenter="hoverCta(true)"
+                    @mouseleave="hoverCta(false)"
+                    class="px-8 py-4 border border-white/20 hover:border-brand-red text-white hover:text-brand-red font-bold uppercase tracking-wider text-xs sm:text-sm inline-flex items-center justify-center gap-3 transition-all duration-300 backdrop-blur-sm">
+                    <span x-text="t('ctaDiscuss')"></span>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div class="mt-20 pt-8 border-t border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs font-mono text-brand-muted">
+                <div class="flex items-center gap-3">
+                    <span class="w-2 h-2 rounded-full bg-brand-red animate-ping"></span>
+                    <span class="uppercase tracking-widest text-brand-light" x-text="t('heroSubLeft')"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 02: WHO WE ARE -->
+    <section id="about" class="relative py-28 bg-brand-light text-brand-black border-t border-white/10 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl px-6 lg:px-12 pointer-events-none">
+            <div class="w-[2px] h-12 bg-gradient-to-b from-brand-red to-transparent mx-auto"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                
+                <div class="lg:col-span-7 reveal-up">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="h-[2px] w-8 bg-brand-red"></span>
+                        <span class="text-xs sm:text-sm uppercase tracking-widest text-brand-red font-bold" x-text="t('sec2Sub')"></span>
+                    </div>
+
+                    <h2 class="font-bold text-3xl sm:text-4xl md:text-5xl lg:text-5xl uppercase tracking-normal text-brand-black leading-snug mb-8">
+                        <span x-text="t('sec2Title1')"></span><br>
+                        <span x-text="t('sec2Title2')"></span><br>
+                        <span class="text-brand-red" x-text="t('sec2Title3')"></span>
+                    </h2>
+
+                    <div class="space-y-4 text-brand-black/90 font-normal leading-relaxed text-base sm:text-lg lg:text-xl max-w-2xl mb-8">
+                        <p x-html="t('sec2P1')"></p>
+                        <p x-text="t('sec2P2')"></p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 reveal-up">
+                    <div class="relative border-2 border-brand-black/10 p-2 bg-white shadow-2xl">
+                        <div class="relative w-full overflow-hidden bg-white">
+                            <img 
+                                src="https://cdn.phototourl.com/member/2026-10-08-4d74e40d-3fde-4e25-8bb5-456d3a9a881a.jpg" 
+                                alt="PT. DZAKIY MAJU BERSAMA — Sumber Daya & Komoditas" 
+                                class="w-full h-auto object-contain filter contrast-125 saturate-110 hover:scale-102 transition-transform duration-700"
+                            >
+                        </div>
+                        <div class="p-4 bg-white border-t border-brand-black/10">
+                            <span class="bg-brand-red text-white text-[9px] font-bold px-2 py-0.5 tracking-widest uppercase inline-block mb-1.5">SUMBER DAYA & KOMODITAS</span>
+                            <p class="font-bold uppercase tracking-wider text-xs font-mono text-brand-black">Batu bara, pasir, bauksit dan perdagangan komoditas besar lainnya.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 03: PROJECT FINANCING (PRESENTATION SLIDE REFERENCE) -->
+    <section id="how-we-connect" class="py-28 bg-[#050505] text-brand-light relative border-t border-white/10 overflow-hidden">
+        <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+            <img 
+                src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?q=80&w=2000&auto=format&fit=crop" 
+                alt="Industrial Infrastructure" 
+                class="w-full h-full object-cover object-right opacity-15 filter grayscale contrast-150"
+            >
+            <div class="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/95 to-transparent"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+            
+            <div class="flex items-center gap-3 mb-8">
+                <span class="font-mono text-sm sm:text-base font-bold text-brand-red tracking-widest">03</span>
+                <span class="text-white/30">—</span>
+                <span class="text-xs sm:text-sm uppercase tracking-widest text-brand-red font-bold font-mono">PROJECT FINANCING</span>
+                <div class="h-[1px] flex-grow bg-brand-red/30 max-w-md ml-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+                
+                <div class="lg:col-span-7 space-y-10">
+                    <h2 class="font-condensed font-bold text-4xl sm:text-5xl lg:text-6xl uppercase tracking-normal text-white leading-none">
+                        DARI KEBUTUHAN PROYEK<br>
+                        <span class="text-brand-red">MENUJU PELUANG TERSTRUKTUR.</span>
+                    </h2>
+
+                    <div class="space-y-6 pt-2">
+                        <div class="flex items-start gap-4 pb-6 border-b border-white/10">
+                            <span class="font-condensed font-bold text-3xl sm:text-4xl text-brand-red leading-none">01</span>
+                            <div class="w-[2px] h-10 bg-brand-red/60 flex-shrink-0 mt-1"></div>
+                            <div>
+                                <h3 class="font-bold text-base sm:text-lg uppercase text-white font-mono">ADVISORY</h3>
+                                <p class="text-sm text-brand-muted mt-1 leading-relaxed" x-text="t('sec3Step1Desc')"></p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 pb-6 border-b border-white/10">
+                            <span class="font-condensed font-bold text-3xl sm:text-4xl text-brand-red leading-none">02</span>
+                            <div class="w-[2px] h-10 bg-brand-red/60 flex-shrink-0 mt-1"></div>
+                            <div>
+                                <h3 class="font-bold text-base sm:text-lg uppercase text-white font-mono">CONNECTION</h3>
+                                <p class="text-sm text-brand-muted mt-1 leading-relaxed" x-text="t('sec3Step2Desc')"></p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 pb-6 border-b border-white/10">
+                            <span class="font-condensed font-bold text-3xl sm:text-4xl text-brand-red leading-none">03</span>
+                            <div class="w-[2px] h-10 bg-brand-red/60 flex-shrink-0 mt-1"></div>
+                            <div>
+                                <h3 class="font-bold text-base sm:text-lg uppercase text-white font-mono">ARRANGEMENT</h3>
+                                <p class="text-sm text-brand-muted mt-1 leading-relaxed" x-text="t('sec3Step3Desc')"></p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 pb-6 border-b border-white/10">
+                            <span class="font-condensed font-bold text-3xl sm:text-4xl text-brand-red leading-none">04</span>
+                            <div class="w-[2px] h-10 bg-brand-red/60 flex-shrink-0 mt-1"></div>
+                            <div>
+                                <h3 class="font-bold text-base sm:text-lg uppercase text-white font-mono">TRANSACTION SUPPORT</h3>
+                                <p class="text-sm text-brand-muted mt-1 leading-relaxed" x-text="t('sec3Step4Desc')"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 flex flex-col justify-between space-y-10">
+                    
+                    <div class="p-6 sm:p-8 border border-white/20 bg-brand-black/90 relative space-y-5 shadow-2xl">
+                        
+                        <div class="border border-white/40 p-3 text-center max-w-xs mx-auto">
+                            <span class="font-bold text-xs sm:text-sm uppercase tracking-widest text-white font-mono">PROJECT OWNER</span>
+                        </div>
+
+                        <div class="flex justify-center">
+                            <div class="w-[2px] h-6 bg-brand-red"></div>
+                        </div>
+
+                        <div class="border-2 border-brand-red bg-brand-black p-4 text-center relative max-w-sm mx-auto shadow-[0_0_20px_rgba(215,25,32,0.3)]">
+                            <h4 class="font-serif font-bold text-base sm:text-lg uppercase tracking-wider text-white">
+                                PT. <span class="text-brand-red">DZAKIY</span> MAJU BERSAMA
+                            </h4>
+                            <span class="text-[9px] font-mono uppercase tracking-[0.2em] text-brand-red font-bold block mt-1">CONNECTING LAYER</span>
+                        </div>
+
+                        <div class="text-center">
+                            <span class="text-[10px] font-mono text-brand-muted uppercase tracking-wider">Relevant Counterparties</span>
+                            <div class="w-[2px] h-5 bg-brand-red mx-auto mt-2"></div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <div class="border border-white/30 p-2.5 text-center">
+                                <span class="font-bold text-[10px] uppercase tracking-wider text-white font-mono block">CAPITAL PROVIDER</span>
+                            </div>
+                            <div class="border border-white/30 p-2.5 text-center">
+                                <span class="font-bold text-[10px] uppercase tracking-wider text-white font-mono block">INVESTOR</span>
+                            </div>
+                            <div class="border border-white/30 p-2.5 text-center">
+                                <span class="font-bold text-[10px] uppercase tracking-wider text-white font-mono block">STRATEGIC PARTNER</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="pt-4 border-t border-brand-red/30 relative">
+                        <div class="flex items-start gap-4">
+                            <span class="text-3xl font-serif text-brand-red leading-none">“</span>
+                            <p class="text-sm sm:text-base italic text-brand-light font-sans leading-relaxed" x-text="t('sec3QuoteText')"></p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="mt-16 pt-6 border-t border-white/10 flex items-center justify-between text-xs font-mono text-brand-muted">
+                <span>PT. DZAKIY MAJU BERSAMA &copy; 2026</span>
+                <span class="text-brand-red font-bold text-sm">03</span>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 04: CAPABILITIES -->
+    <section id="capabilities" class="py-28 bg-brand-black text-brand-light border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            
+            <div class="mb-16 reveal-up">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="h-[2px] w-8 bg-brand-red"></span>
+                    <span class="text-xs sm:text-sm uppercase tracking-widest text-brand-red font-bold" x-text="t('sec4Sub')"></span>
+                </div>
+                <h2 class="font-bold text-3xl sm:text-4xl md:text-5xl lg:text-5xl uppercase tracking-normal text-white leading-snug">
+                    <span x-text="t('sec4Title1')"></span><span class="text-brand-red">.</span><br>
+                    <span x-text="t('sec4Title2')"></span><span class="text-brand-red">.</span>
+                </h2>
+            </div>
+
+            <div class="space-y-4 reveal-up">
+                
+                <div 
+                    @click="activeCapability = 0"
+                    @mouseenter="activeCapability = 0"
+                    :class="activeCapability === 0 ? 'border-brand-red bg-brand-dark shadow-xl cap-row-active' : 'border-white/10 bg-brand-black hover:border-white/30'"
+                    class="border p-8 transition-all duration-300 cursor-pointer group relative overflow-hidden">
+                    
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+                        <div class="flex items-start md:items-center gap-6">
+                            <span class="font-extrabold text-3xl md:text-4xl text-brand-red transition-transform duration-300 group-hover:scale-105">01</span>
+                            <div>
+                                <span class="text-[10px] font-mono text-brand-muted uppercase tracking-widest" x-text="t('cap1Label')"></span>
+                                <h3 class="font-bold text-lg md:text-xl uppercase tracking-wide text-white" x-text="t('cap1Title')"></h3>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <i data-lucide="chevron-right" class="w-6 h-6 text-brand-red cap-arrow-move"></i>
+                        </div>
+                    </div>
+
+                    <div x-show="activeCapability === 0" x-collapse class="mt-8 pt-8 border-t border-white/10 grid grid-cols-1 lg:grid-cols-12 gap-8">
+                        <div class="lg:col-span-7 space-y-4 text-sm text-brand-muted leading-relaxed">
+                            <p class="text-white font-medium text-base sm:text-lg" x-text="t('cap1P1')"></p>
+                            <p class="text-sm sm:text-base" x-text="t('cap1P2')"></p>
+                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 font-mono text-xs sm:text-sm text-white">
+                                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-red"></span> <span x-text="t('cap1L1')"></span></li>
+                                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-red"></span> <span x-text="t('cap1L2')"></span></li>
+                                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-red"></span> <span x-text="t('cap1L3')"></span></li>
+                                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-red"></span> <span x-text="t('cap1L4')"></span></li>
+                            </ul>
+                        </div>
+                        <div class="lg:col-span-5 overflow-hidden">
+                            <img 
+                                src="https://cdn.phototourl.com/member/2026-10-08-872260f5-67b4-45bd-9a69-c76a2ab387f1.jpg" 
+                                alt="Strategic Business Advisory" 
+                                class="w-full h-48 sm:h-56 object-cover filter grayscale contrast-125 border-l-2 border-brand-red cap-img-slide"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <div 
+                    @click="activeCapability = 1"
+                    @mouseenter="activeCapability = 1"
+                    :class="activeCapability === 1 ? 'border-brand-red bg-brand-dark shadow-xl cap-row-active' : 'border-white/10 bg-brand-black hover:border-white/30'"
+                    class="border p-8 transition-all duration-300 cursor-pointer group relative overflow-hidden">
+                    
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+                        <div class="flex items-start md:items-center gap-6">
+                            <span class="font-extrabold text-3xl md:text-4xl text-brand-red transition-transform duration-300 group-hover:scale-105">02</span>
+                            <div>
+                                <span class="text-[10px] font-mono text-brand-muted uppercase tracking-widest" x-text="t('cap2Label')"></span>
+                                <h3 class="font-bold text-lg md:text-xl uppercase tracking-wide text-white" x-text="t('cap2Title')"></h3>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <i data-lucide="chevron-right" class="w-6 h-6 text-brand-red cap-arrow-move"></i>
+                        </div>
+                    </div>
+
+                    <div x-show="activeCapability === 1" x-collapse class="mt-8 pt-8 border-t border-white/10 grid grid-cols-1 lg:grid-cols-12 gap-8">
+                        <div class="lg:col-span-7 space-y-4 text-sm text-brand-muted leading-relaxed">
+                            <p class="text-white font-medium text-base sm:text-lg" x-text="t('cap2P1')"></p>
+                            <p class="text-sm sm:text-base" x-text="t('cap2P2')"></p>
+                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 font-mono text-xs sm:text-sm text-white">
+                                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-red"></span> <span x-text="t('cap2L1')"></span></li>
+                                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-red"></span> <span x-text="t('cap2L2')"></span></li>
+                                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-red"></span> <span x-text="t('cap2L3')"></span></li>
+                                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-red"></span> <span x-text="t('cap2L4')"></span></li>
+                            </ul>
+                        </div>
+                        <div class="lg:col-span-5 overflow-hidden">
+                            <img 
+                                src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?q=80&w=1000&auto=format&fit=crop" 
+                                alt="Transaction Support" 
+                                class="w-full h-48 sm:h-56 object-cover filter grayscale contrast-125 border-l-2 border-brand-red cap-img-slide"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <div 
+                    @click="activeCapability = 2"
+                    @mouseenter="activeCapability = 2"
+                    :class="activeCapability === 2 ? 'border-brand-red bg-brand-dark shadow-xl cap-row-active' : 'border-white/10 bg-brand-black hover:border-white/30'"
+                    class="border p-8 transition-all duration-300 cursor-pointer group relative overflow-hidden">
+                    
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+                        <div class="flex items-start md:items-center gap-6">
+                            <span class="font-extrabold text-3xl md:text-4xl text-brand-red transition-transform duration-300 group-hover:scale-105">03</span>
+                            <div>
+                                <span class="text-[10px] font-mono text-brand-muted uppercase tracking-widest" x-text="t('cap3Label')"></span>
+                                <h3 class="font-bold text-lg md:text-xl uppercase tracking-wide text-white" x-text="t('cap3Title')"></h3>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <i data-lucide="chevron-right" class="w-6 h-6 text-brand-red cap-arrow-move"></i>
+                        </div>
+                    </div>
+
+                    <div x-show="activeCapability === 2" x-collapse class="mt-8 pt-8 border-t border-white/10 grid grid-cols-1 lg:grid-cols-12 gap-8">
+                        <div class="lg:col-span-7 space-y-4 text-sm text-brand-muted leading-relaxed">
+                            <p class="text-white font-medium text-base sm:text-lg" x-text="t('cap3P1')"></p>
+                            <p class="text-sm sm:text-base" x-text="t('cap3P2')"></p>
+                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 font-mono text-xs sm:text-sm text-white">
+                                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-red"></span> <span x-text="t('cap3L1')"></span></li>
+                                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-red"></span> <span x-text="t('cap3L2')"></span></li>
+                                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-red"></span> <span x-text="t('cap3L3')"></span></li>
+                                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-red"></span> <span x-text="t('cap3L4')"></span></li>
+                            </ul>
+                        </div>
+                        <div class="lg:col-span-5 overflow-hidden">
+                            <img 
+                                src="https://cdn.phototourl.com/member/2026-09-27-a1e41ee5-9154-4454-b5f6-b72febdaac97.png" 
+                                alt="Mining Resources" 
+                                class="w-full h-48 sm:h-56 object-cover filter contrast-125 border-l-2 border-brand-red cap-img-slide"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 05: ECOSYSTEM (WITH ANIMATED PIPELINE) -->
+    <section id="ecosystem" class="py-28 bg-brand-dark text-brand-light border-t border-white/10 bg-grid-pattern relative overflow-hidden">
+        
+        <!-- Animated Red Dash Flow Line -->
+        <div class="hidden lg:block absolute top-1/2 left-0 right-0 h-4 -translate-y-1/2 z-0">
+            <svg class="w-full h-4" preserveAspectRatio="none" viewBox="0 0 1000 10">
+                <line x1="0" y1="5" x2="1000" y2="5" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+                <line x1="0" y1="5" x2="1000" y2="5" stroke="#D71920" stroke-width="3" class="animate-dash-flow"/>
+            </svg>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+            
+            <div class="mb-16 reveal-up">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="h-[2px] w-8 bg-brand-red"></span>
+                    <span class="text-xs sm:text-sm uppercase tracking-widest text-brand-red font-bold" x-text="t('sec5Sub')"></span>
+                </div>
+                <h2 class="font-bold text-3xl sm:text-4xl md:text-5xl lg:text-5xl uppercase tracking-normal text-white leading-snug">
+                    <span x-text="t('sec5Title1')"></span><br>
+                    <span x-text="t('sec5Title2')"></span> <span class="text-brand-red" x-text="t('sec5Title3')"></span>
+                </h2>
+            </div>
+
+            <div id="eco-nodes-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-3 xl:gap-4 lg:items-start">
+                
+                <div 
+                    @click="activeEcoStep = 1"
+                    @mouseenter="activeEcoStep = 1"
+                    :class="activeEcoStep === 1 ? 'border-brand-red bg-brand-black shadow-lg scale-102' : 'border-white/10 bg-brand-black/80'"
+                    class="p-5 xl:p-6 border transition-all duration-300 cursor-pointer relative group reveal-up min-w-0">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-brand-red font-bold text-xs">01</span>
+                        <i data-lucide="coins" class="w-4 h-4 text-brand-muted"></i>
+                    </div>
+                    <h3 class="font-bold text-base uppercase text-white mb-2" x-text="t('ecoStep1Title')"></h3>
+                    <p class="text-sm text-brand-muted leading-relaxed" x-text="t('ecoStep1Desc')"></p>
+                    <div class="mt-4 pt-3 border-t border-white/10 text-xs font-mono text-brand-muted" x-text="t('ecoStep1Foot')"></div>
+                </div>
+
+                <div 
+                    @click="activeEcoStep = 2"
+                    @mouseenter="activeEcoStep = 2"
+                    :class="activeEcoStep === 2 ? 'border-brand-red bg-brand-black shadow-lg scale-102' : 'border-white/10 bg-brand-black/80'"
+                    class="p-5 xl:p-6 border transition-all duration-300 cursor-pointer relative group reveal-up min-w-0">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-brand-red font-bold text-xs">02</span>
+                        <i data-lucide="layers" class="w-4 h-4 text-brand-muted"></i>
+                    </div>
+                    <h3 class="font-bold text-base uppercase text-white mb-2" x-text="t('ecoStep2Title')"></h3>
+                    <p class="text-sm text-brand-muted leading-relaxed" x-text="t('ecoStep2Desc')"></p>
+                    <div class="mt-4 pt-3 border-t border-white/10 text-xs font-mono text-brand-muted" x-text="t('ecoStep2Foot')"></div>
+                </div>
+
+                <div 
+                    @click="activeEcoStep = 3"
+                    @mouseenter="activeEcoStep = 3"
+                    :class="activeEcoStep === 3 ? 'border-brand-red bg-brand-black ring-2 ring-brand-red shadow-2xl lg:scale-102' : 'border-brand-red/60 bg-brand-black'"
+                    class="p-5 xl:p-6 border-2 transition-all duration-300 cursor-pointer relative group bg-brand-black reveal-up min-w-0 sm:col-span-2 lg:col-span-1 lg:mt-2.5">
+                    <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-brand-red text-white text-[9px] font-bold px-2 py-0.5 tracking-wider uppercase shadow-md whitespace-nowrap" x-text="t('nodeCenterBadge')"></div>
+                    <div class="flex items-center justify-between mb-3 pt-1">
+                        <span class="text-brand-red font-bold text-xs">03</span>
+                        <div class="w-3 h-3 bg-brand-red animate-pulse"></div>
+                    </div>
+                    <h3 class="font-bold text-sm sm:text-base uppercase text-white mb-2 leading-tight break-words">PT. DZAKIY MAJU BERSAMA</h3>
+                    <p class="text-sm text-brand-muted leading-relaxed" x-text="t('ecoStep3Desc')"></p>
+                    <div class="mt-4 pt-3 border-t border-brand-red/30 text-xs font-mono text-brand-red font-bold" x-text="t('ecoStep3Foot')"></div>
+                </div>
+
+                <div 
+                    @click="activeEcoStep = 4"
+                    @mouseenter="activeEcoStep = 4"
+                    :class="activeEcoStep === 4 ? 'border-brand-red bg-brand-black shadow-lg scale-102' : 'border-white/10 bg-brand-black/80'"
+                    class="p-5 xl:p-6 border transition-all duration-300 cursor-pointer relative group reveal-up min-w-0">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-brand-red font-bold text-xs">04</span>
+                        <i data-lucide="truck" class="w-4 h-4 text-brand-muted"></i>
+                    </div>
+                    <h3 class="font-bold text-base uppercase text-white mb-2" x-text="t('ecoStep4Title')"></h3>
+                    <p class="text-sm text-brand-muted leading-relaxed" x-text="t('ecoStep4Desc')"></p>
+                    <div class="mt-4 pt-3 border-t border-white/10 text-xs font-mono text-brand-muted" x-text="t('ecoStep4Foot')"></div>
+                </div>
+
+                <div 
+                    @click="activeEcoStep = 5"
+                    @mouseenter="activeEcoStep = 5"
+                    :class="activeEcoStep === 5 ? 'border-brand-red bg-brand-black shadow-lg scale-102' : 'border-white/10 bg-brand-black/80'"
+                    class="p-5 xl:p-6 border transition-all duration-300 cursor-pointer relative group reveal-up min-w-0">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-brand-red font-bold text-xs">05</span>
+                        <i data-lucide="globe-2" class="w-4 h-4 text-brand-muted"></i>
+                    </div>
+                    <h3 class="font-bold text-base uppercase text-white mb-2" x-text="t('ecoStep5Title')"></h3>
+                    <p class="text-sm text-brand-muted leading-relaxed" x-text="t('ecoStep5Desc')"></p>
+                    <div class="mt-4 pt-3 border-t border-white/10 text-xs font-mono text-brand-muted" x-text="t('ecoStep5Foot')"></div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 06: BUSINESS AREAS -->
+    <section id="business-areas" class="py-28 bg-brand-black text-brand-light border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            
+            <div class="mb-16 reveal-up">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="h-[2px] w-8 bg-brand-red"></span>
+                    <span class="text-xs sm:text-sm uppercase tracking-widest text-brand-red font-bold" x-text="t('sec6Sub')"></span>
+                </div>
+                <h2 class="font-bold text-3xl sm:text-4xl md:text-5xl lg:text-5xl uppercase tracking-normal text-white leading-snug">
+                    <span x-text="t('sec6Title1')"></span><span class="text-brand-red">.</span><br>
+                    <span x-text="t('sec6Title2')"></span><span class="text-brand-red">.</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 reveal-up">
+                
+                <div class="border border-white/10 bg-brand-dark p-8 relative group hover:border-brand-red/50 transition-colors">
+                    <div class="w-8 h-[2px] bg-brand-red mb-6"></div>
+                    <span class="text-brand-red font-bold text-sm tracking-widest">01</span>
+                    <h3 class="font-bold text-xl uppercase tracking-wider text-white mt-2 mb-6" x-text="t('sec6Col1Title')"></h3>
+                    
+                    <ul class="space-y-4 text-base text-brand-muted border-t border-white/10 pt-6 font-mono">
+                        <li class="flex items-center gap-3 hover:text-white transition-colors">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-brand-red flex-shrink-0"></i>
+                            <span x-text="t('sec6Col1Item1')"></span>
+                        </li>
+                        <li class="flex items-center gap-3 hover:text-white transition-colors">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-brand-red flex-shrink-0"></i>
+                            <span x-text="t('sec6Col1Item2')"></span>
+                        </li>
+                        <li class="flex items-center gap-3 hover:text-white transition-colors">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-brand-red flex-shrink-0"></i>
+                            <span x-text="t('sec6Col1Item3')"></span>
+                        </li>
+                        <li class="flex items-center gap-3 hover:text-white transition-colors">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-brand-red flex-shrink-0"></i>
+                            <span x-text="t('sec6Col1Item4')"></span>
+                        </li>
+                        <li class="flex items-center gap-3 hover:text-white transition-colors">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-brand-red flex-shrink-0"></i>
+                            <span x-text="t('sec6Col1Item5')"></span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="border border-white/10 bg-brand-dark p-8 relative group hover:border-brand-red/50 transition-colors">
+                    <div class="w-8 h-[2px] bg-brand-red mb-6"></div>
+                    <span class="text-brand-red font-bold text-sm tracking-widest">02</span>
+                    <h3 class="font-bold text-xl uppercase tracking-wider text-white mt-2 mb-6" x-text="t('sec6Col2Title')"></h3>
+                    
+                    <ul class="space-y-4 text-base text-brand-muted border-t border-white/10 pt-6 font-mono">
+                        <li class="flex items-center gap-3 hover:text-white transition-colors">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-brand-red flex-shrink-0"></i>
+                            <span x-text="t('sec6Col2Item1')"></span>
+                        </li>
+                        <li class="flex items-center gap-3 hover:text-white transition-colors">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-brand-red flex-shrink-0"></i>
+                            <span x-text="t('sec6Col2Item2')"></span>
+                        </li>
+                        <li class="flex items-center gap-3 hover:text-white transition-colors">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-brand-red flex-shrink-0"></i>
+                            <span x-text="t('sec6Col2Item3')"></span>
+                        </li>
+                        <li class="flex items-center gap-3 hover:text-white transition-colors">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-brand-red flex-shrink-0"></i>
+                            <span x-text="t('sec6Col2Item4')"></span>
+                        </li>
+                        <li class="flex items-center gap-3 hover:text-white transition-colors">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-brand-red flex-shrink-0"></i>
+                            <span x-text="t('sec6Col2Item5')"></span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="border border-white/10 bg-brand-dark p-8 relative group hover:border-brand-red/50 transition-colors">
+                    <div class="w-8 h-[2px] bg-brand-red mb-6"></div>
+                    <span class="text-brand-red font-bold text-sm tracking-widest">03</span>
+                    <h3 class="font-bold text-xl uppercase tracking-wider text-white mt-2 mb-6" x-text="t('sec6Col3Title')"></h3>
+                    
+                    <ul class="space-y-4 text-base text-brand-muted border-t border-white/10 pt-6 font-mono">
+                        <li class="flex items-center gap-3 hover:text-white transition-colors">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-brand-red flex-shrink-0"></i>
+                            <span x-text="t('sec6Col3Item1')"></span>
+                        </li>
+                        <li class="flex items-center gap-3 hover:text-white transition-colors">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-brand-red flex-shrink-0"></i>
+                            <span x-text="t('sec6Col3Item2')"></span>
+                        </li>
+                        <li class="flex items-center gap-3 hover:text-white transition-colors">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-brand-red flex-shrink-0"></i>
+                            <span x-text="t('sec6Col3Item3')"></span>
+                        </li>
+                        <li class="flex items-center gap-3 hover:text-white transition-colors">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-brand-red flex-shrink-0"></i>
+                            <span x-text="t('sec6Col3Item4')"></span>
+                        </li>
+                        <li class="flex items-center gap-3 hover:text-white transition-colors">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-brand-red flex-shrink-0"></i>
+                            <span x-text="t('sec6Col3Item5')"></span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 07: WHY DZAKIY -->
+    <section class="py-28 bg-brand-dark text-brand-light border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            
+            <div class="mb-16 reveal-up">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="h-[2px] w-8 bg-brand-red"></span>
+                    <span class="text-xs sm:text-sm uppercase tracking-widest text-brand-red font-bold" x-text="t('sec7Sub')"></span>
+                </div>
+                <h2 class="font-bold text-3xl sm:text-4xl md:text-5xl lg:text-5xl uppercase tracking-normal text-white leading-snug">
+                    <span x-text="t('sec7Title1')"></span><span class="text-brand-red">.</span><br>
+                    <span x-text="t('sec7Title2')"></span><span class="text-brand-red">.</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 divide-y lg:divide-y-0 lg:divide-x divide-white/10 reveal-up">
+                
+                <div class="pt-6 lg:pt-0 lg:pl-0 pr-4 group">
+                    <span class="font-extrabold text-4xl text-brand-red block mb-4 transform group-hover:translate-x-1 transition-transform">01</span>
+                    <h3 class="font-bold text-xl uppercase tracking-wider text-white mb-2" x-text="t('why1Title')"></h3>
+                    <p class="text-base text-brand-muted leading-relaxed font-normal" x-text="t('why1Desc')"></p>
+                </div>
+
+                <div class="pt-6 lg:pt-0 lg:pl-8 pr-4 group">
+                    <span class="font-extrabold text-4xl text-brand-red block mb-4 transform group-hover:translate-x-1 transition-transform">02</span>
+                    <h3 class="font-bold text-xl uppercase tracking-wider text-white mb-2" x-text="t('why2Title')"></h3>
+                    <p class="text-base text-brand-muted leading-relaxed font-normal" x-text="t('why2Desc')"></p>
+                </div>
+
+                <div class="pt-6 lg:pt-0 lg:pl-8 pr-4 group">
+                    <span class="font-extrabold text-4xl text-brand-red block mb-4 transform group-hover:translate-x-1 transition-transform">03</span>
+                    <h3 class="font-bold text-xl uppercase tracking-wider text-white mb-2" x-text="t('why3Title')"></h3>
+                    <p class="text-base text-brand-muted leading-relaxed font-normal" x-text="t('why3Desc')"></p>
+                </div>
+
+                <div class="pt-6 lg:pt-0 lg:pl-8 group">
+                    <span class="font-extrabold text-4xl text-brand-red block mb-4 transform group-hover:translate-x-1 transition-transform">04</span>
+                    <h3 class="font-bold text-xl uppercase tracking-wider text-white mb-2" x-text="t('why4Title')"></h3>
+                    <p class="text-base text-brand-muted leading-relaxed font-normal" x-text="t('why4Desc')"></p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 08: MANAGEMENT ("STRUKTUR PERUSAHAAN") -->
+    <section id="management" class="py-28 bg-brand-black text-brand-light border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            
+            <div class="mb-16 reveal-up">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="h-[2px] w-8 bg-brand-red"></span>
+                    <span class="text-xs sm:text-sm uppercase tracking-widest text-brand-red font-bold" x-text="t('sec8Sub')"></span>
+                </div>
+                <h2 class="font-bold text-3xl sm:text-4xl md:text-5xl lg:text-5xl uppercase tracking-normal text-white leading-snug">
+                    <span x-text="t('sec8Title1')"></span><br>
+                    <span class="text-brand-red" x-text="t('sec8Title2')"></span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 reveal-up">
+                
+                <div class="border border-white/10 bg-brand-dark p-6 group hover:border-brand-red transition-all duration-300">
+                    <div class="w-full h-56 bg-brand-grey mb-6 relative overflow-hidden">
+                        <img 
+                            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop" 
+                            alt="TOMY SURYADI" 
+                            class="w-full h-full object-cover filter grayscale contrast-125 group-hover:scale-105 transition-transform duration-500"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent"></div>
+                    </div>
+                    <h3 class="font-bold text-lg uppercase tracking-wider text-white group-hover:text-brand-red transition-colors">TOMY SURYADI</h3>
+                    <p class="text-xs uppercase tracking-widest text-brand-red font-mono mt-1" x-text="t('roleCEO')"></p>
+                </div>
+
+                <div class="border border-white/10 bg-brand-dark p-6 group hover:border-brand-red transition-all duration-300">
+                    <div class="w-full h-56 bg-brand-grey mb-6 relative overflow-hidden">
+                        <img 
+                            src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop" 
+                            alt="NOVIANDITA TRISNIA WINDY" 
+                            class="w-full h-full object-cover filter grayscale contrast-125 group-hover:scale-105 transition-transform duration-500"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent"></div>
+                    </div>
+                    <h3 class="font-bold text-lg uppercase tracking-wider text-white group-hover:text-brand-red transition-colors">NOVIANDITA TRISNIA WINDY</h3>
+                    <p class="text-xs uppercase tracking-widest text-brand-red font-mono mt-1" x-text="t('roleCommHead')"></p>
+                </div>
+
+                <div class="border border-white/10 bg-brand-dark p-6 group hover:border-brand-red transition-all duration-300">
+                    <div class="w-full h-56 bg-brand-grey mb-6 relative overflow-hidden">
+                        <img 
+                            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop" 
+                            alt="IKRAR POTAWARI" 
+                            class="w-full h-full object-cover filter grayscale contrast-125 group-hover:scale-105 transition-transform duration-500"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent"></div>
+                    </div>
+                    <h3 class="font-bold text-lg uppercase tracking-wider text-white group-hover:text-brand-red transition-colors">IKRAR POTAWARI</h3>
+                    <p class="text-xs uppercase tracking-widest text-brand-red font-mono mt-1" x-text="t('roleComm')"></p>
+                </div>
+
+                <div class="border border-white/10 bg-brand-dark p-6 group hover:border-brand-red transition-all duration-300">
+                    <div class="w-full h-56 bg-brand-grey mb-6 relative overflow-hidden">
+                        <img 
+                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=600&auto=format&fit=crop" 
+                            alt="AGUNG" 
+                            class="w-full h-full object-cover filter grayscale contrast-125 group-hover:scale-105 transition-transform duration-500"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent"></div>
+                    </div>
+                    <h3 class="font-bold text-lg uppercase tracking-wider text-white group-hover:text-brand-red transition-colors">AGUNG</h3>
+                    <p class="text-xs uppercase tracking-widest text-brand-red font-mono mt-1" x-text="t('roleDir')"></p>
+                </div>
+
+                <div class="border border-white/10 bg-brand-dark p-6 group hover:border-brand-red transition-all duration-300">
+                    <div class="w-full h-56 bg-brand-grey mb-6 relative overflow-hidden">
+                        <img 
+                            src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=600&auto=format&fit=crop" 
+                            alt="ACHMAD MUCHLASHON" 
+                            class="w-full h-full object-cover filter grayscale contrast-125 group-hover:scale-105 transition-transform duration-500"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent"></div>
+                    </div>
+                    <h3 class="font-bold text-lg uppercase tracking-wider text-white group-hover:text-brand-red transition-colors">ACHMAD MUCHLASHON</h3>
+                    <p class="text-xs uppercase tracking-widest text-brand-red font-mono mt-1" x-text="t('roleDir')"></p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 09: FINAL CTA & CORPORATE HEADQUARTERS -->
+    <section id="final-cta-trigger" class="py-28 bg-brand-black text-brand-light relative border-t border-brand-red/40 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-8">
+                    <span class="text-brand-red font-bold text-xs sm:text-sm tracking-widest uppercase mb-4 block" x-text="t('finalBadge')"></span>
+                    
+                    <div class="space-y-2 mb-6">
+                        <div id="cta-line-1" class="diagram-step">
+                            <h2 class="font-bold text-3xl sm:text-5xl md:text-6xl uppercase tracking-normal text-white leading-normal" x-text="t('finalTitle1')"></h2>
+                        </div>
+                        <div id="cta-line-2" class="diagram-step">
+                            <h2 class="font-bold text-3xl sm:text-5xl md:text-6xl uppercase tracking-normal text-brand-red leading-normal" x-text="t('finalTitle2')"></h2>
+                        </div>
+                    </div>
+
+                    <div class="w-full max-w-md mb-8 overflow-hidden">
+                        <svg class="w-full h-3" viewBox="0 0 400 10">
+                            <line id="cta-red-line" x1="0" y1="5" x2="400" y2="5" 
+                                  stroke="#D71920" stroke-width="4" 
+                                  class="svg-line-draw" />
+                        </svg>
+                    </div>
+
+                    <p id="cta-copy" class="diagram-step text-brand-muted text-base sm:text-lg max-w-2xl leading-relaxed mb-8" x-text="t('finalDesc')"></p>
+
+                    <div id="cta-button" class="diagram-step">
+                        <button 
+                            @click="modalOpen = true"
+                            @mouseenter="hoverCta(true)"
+                            @mouseleave="hoverCta(false)"
+                            class="px-10 py-5 bg-brand-red hover:bg-brand-redHover text-white font-bold uppercase tracking-wider text-sm sm:text-base inline-flex items-center gap-3 transition-all duration-300 shadow-2xl hover:shadow-brand-red/40">
+                            <span x-text="t('finalCtaBtn')"></span>
+                            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-4 bg-brand-dark border border-white/10 p-8 space-y-6 reveal-up">
+                    <h4 class="font-bold text-lg uppercase tracking-wider text-white border-b border-white/10 pb-4" x-text="t('hqTitle')"></h4>
+
+                    <div class="space-y-5 text-sm font-mono text-brand-muted">
+                        <div class="flex items-start gap-3.5">
+                            <i data-lucide="building-2" class="w-5 h-5 text-brand-red flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <span class="text-white font-bold text-base block">PT. DZAKIY MAJU BERSAMA</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3.5">
+                            <i data-lucide="mail" class="w-5 h-5 text-brand-red flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <span class="text-white block font-sans font-bold mb-1 uppercase" x-text="t('hqEmailLabel')"></span>
+                                <a href="mailto:legal@dzakiymajubersama.com" class="text-brand-red hover:underline block font-bold">legal@dzakiymajubersama.com</a>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3.5">
+                            <i data-lucide="phone" class="w-5 h-5 text-brand-red flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <span class="text-white block font-sans font-bold mb-1 uppercase">WHATSAPP / PHONE</span>
+                                <a href="https://wa.me/628133132006?text=Halo%20PT.%20Dzakiy%20Maju%20Bersama%2C%20saya%20tertarik%20untuk%20mengetahui%20lebih%20lanjut%20mengenai%20layanan%20dan%20peluang%20kerja%20sama." 
+                                   target="_blank" 
+                                   rel="noopener" 
+                                   class="text-brand-red hover:underline block font-bold">+62 813 3132 006</a>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3.5">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-brand-red flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <span class="text-white block font-sans font-bold mb-1 uppercase" x-text="t('hqLocLabel')"></span>
+                                <span class="leading-relaxed block text-white/80" x-text="t('hqLocValue')"></span>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-white/10 flex items-start gap-3.5">
+                            <i data-lucide="file-check-2" class="w-5 h-5 text-brand-red flex-shrink-0 mt-0.5"></i>
+                            <div class="space-y-1">
+                                <div><span class="text-white font-bold">NIB:</span> 0709260103736</div>
+                                <div><span class="text-white font-bold">NPWP:</span> 1000 0000 1105 8588</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-12 bg-brand-black border-t border-white/10 text-xs text-brand-muted">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
+            
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 flex-shrink-0">
+                    <img 
+                        src="https://cdn.phototourl.com/member/2026-09-27-f998a1a6-e9c4-46c3-8a87-d45dd4ae1925.png" 
+                        alt="PT. DZAKIY MAJU BERSAMA Logo" 
+                        class="w-full h-full object-contain"
+                    />
+                </div>
+                <span class="font-serif font-bold text-sm tracking-wider text-white">
+                    PT. <span class="text-brand-red">DZAKIY</span> MAJU BERSAMA
                 </span>
             </div>
-        </div>
-    </section>
 
-    <section id="kontak" class="bg-brand-black border-t border-brand-border py-16 px-5 text-center">
-        <div class="max-w-xl mx-auto">
-            <span class="text-brand-red font-mono text-[10px] uppercase tracking-widest block mb-2 font-semibold">02 // Terhubung</span>
-            <h2 class="text-xl sm:text-2xl font-bold uppercase mb-3 font-display">DISKUSIKAN PROYEK ANDA</h2>
-            <p class="text-brand-muted text-xs sm:text-sm mb-8">Email korporat: info@dzakiymajubersama.com</p>
-            <a href="mailto:info@dzakiymajubersama.com" class="inline-block bg-brand-text hover:bg-white text-brand-black px-7 py-3.5 rounded-lg font-bold text-xs uppercase tracking-wider shadow-lg transition-all">
-                KIRIM EMAIL SEKARANG
-            </a>
-        </div>
-    </section>
+            <nav class="flex flex-wrap items-center gap-6 font-mono text-[11px] uppercase tracking-wider">
+                <a href="#about" class="hover:text-brand-red transition-colors" x-text="t('navWhoWeAre')"></a>
+                <a href="#capabilities" class="hover:text-brand-red transition-colors" x-text="t('navCapabilities')"></a>
+                <a href="#ecosystem" class="hover:text-brand-red transition-colors" x-text="t('navEcosystem')"></a>
+                <a href="#business-areas" class="hover:text-brand-red transition-colors" x-text="t('navSectors')"></a>
+                <a href="#management" class="hover:text-brand-red transition-colors" x-text="t('navManagement')"></a>
+            </nav>
 
-    <footer class="py-8 text-center text-brand-muted/60 text-[10px] border-t border-brand-border/40 font-mono tracking-widest uppercase">
-        &copy; 2026 PT. DZAKIY MAJU BERSAMA. All rights reserved.
+            <div class="font-mono text-[11px]">
+                &copy; 2026 PT. DZAKIY MAJU BERSAMA. <span x-text="t('footerRights')"></span>
+            </div>
+
+        </div>
     </footer>
-</body>
-</html>
+
+    <!-- INQUIRY MODAL -->
+    <div 
+        x-show="modalOpen" 
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-
 ```
